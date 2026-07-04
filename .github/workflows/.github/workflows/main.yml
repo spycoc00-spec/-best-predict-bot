@@ -1,0 +1,27 @@
+name: Football Auto Update
+
+on:
+  schedule:
+    # বাংলাদেশ সময় দুপুর ১২:৩০ (ইউটিসি সকাল ৬:৩০)
+    - cron: '30 6 * * *'
+  workflow_dispatch: # এটি থাকলে আপনি বাটন টিপেও আপডেট করতে পারবেন
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install requests google-genai
+
+      - name: Run AI Automation
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python auto_update.py
